@@ -35,7 +35,7 @@ The network architecture consists of three modules.
 
 The final semantic segmentation network architecture was constructed as follows. The encoder blocks and decoder blocks are discussed below. Note that all convolutions use 'same' padding and are supported by batch normalisation.
 
-![semantic segmentation network architecture](output_images/model block diagram.png)
+![semantic segmentation network architecture](output_images/model_block_diagram.png)
 
 The black arrows show the data flow and the blue arrows indicate the skip connections used in the network model. Skip connections will be described later.
 
@@ -45,7 +45,7 @@ The code for model architecture can be found in task block seven of the `model_t
 
 Each *Encoder Block* is an inception model, inspired by the paper [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357). The encoder block architecture is constructed as follows. Note all convolutions, and separable convolutions use 'same' padding and are accompanied by batch normalisation.
 
-![semantic segmentation encoder block architecture](output_images/encoder block diagram.png)
+![semantic segmentation encoder block architecture](output_images/encoder_block_diagram.png)
 
 The idea behind the encoder Inception module is to make cross-channel mapping correlations and the spatial correlations process easier and more efficient by explicitly factoring it into a series of operations that would independently look at cross-channel correlations and spatial correlations.
 
@@ -61,7 +61,7 @@ After the *Encoder module*, the resulting convolution is passed through a *Fully
 
 Each *Decoder Block* architecture is shown below. Note all separable convolutions use 'same' padding and are followed by batch normalisation.
 
-![semantic segmentation decoder block architecture](output_images/decoder block diagram.png)
+![semantic segmentation decoder block architecture](output_images/decoder_block_diagram.png)
 
 Each decoder block upsamples the input data, doubling the height and width of the data. This is followed by a cross-channel correlation of the data with a 1x1 separable convolution. These correlations are then mapped into 3D space with a 3x3 separable convolution.
 
