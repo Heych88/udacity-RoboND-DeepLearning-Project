@@ -114,11 +114,11 @@ As of writing this, the trained model will only follow the target human. However
 
 The trained model, `model_weights`, can be found in the folder `data/weights/`.
 
-To run the model in the simulator, navigate to the repositories location and run the `follow.py` file with the weights file as the argument.
+To run the model in the simulator, navigate to the repositories location and into the folder `code/` and run the `follow.py` file with the weights file as the argument.
 
 ```sh
-$ cd <path to repository>/udacity-RoboND-DeepLearning-Project/
-$ python3 code/follower.py model_weights
+$ cd <path to repository>/udacity-RoboND-DeepLearning-Project/code/
+$ python3 follower.py model_weights
 ```
 
 #### 2. The neural network obtains an accuracy greater than or equal to 40% (0.40) using the Intersection over Union (IoU) metric.
@@ -189,4 +189,4 @@ The result is calculated by the average IoU of correct hero identification, excl
 
 #### 1. The vehicle must successfully drive a lap around the track. No tire may leave the drivable portion of the track surface. The car may not pop up onto ledges or roll over any surfaces that would otherwise be considered unsafe (if humans were in the vehicle).
 
-A video of a completed lap can be found on youtube [here](https://youtu.be/6-roJ8nq7to).
+A video of a completed lap can be found on youtube [here](https://youtu.be/vOzxCyxd7oY).
