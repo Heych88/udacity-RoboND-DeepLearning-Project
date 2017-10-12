@@ -75,12 +75,39 @@ Skip connection between the early part of the encoder and the later part of the 
 
 #### 2. Explain the neural network parameters including the values selected and how these values were obtained.
 
-The model parameters, such as network depth, kernel's and stride sizes were derived from reading multiple research paper on *semantic segmentation*. The papers are;
- * [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357)
- * [SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation](https://arxiv.org/abs/1511.00561)
- * [Full-Resolution Residual Networks for Semantic Segmentation in Street Scenes](https://arxiv.org/abs/1611.08323)
+##### Model parameters
 
-The training hyper-parameters, such as epochs, steps per epoch, batch size and learning rate was first intuitively sampled with quick training runs and the final hyper-parameters were choose and a more extensive training run performed. Note, after each epoch, network performance data is obtained and printed out. This lead to increasing the epochs count while decreasing the steps per epoch value for verification of the networks convergence performance.
+The model parameters, such as network depth, kernel's and stride sizes were derived from reading multiple research paper on *semantic segmentation*. The papers are;
+ * [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357) [1]
+ * [SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation](https://arxiv.org/abs/1511.00561) [2]
+ * [Full-Resolution Residual Networks for Semantic Segmentation in Street Scenes](https://arxiv.org/abs/1611.08323) [3]
+
+In the above two papers [1] [3], the only segmentation convolution kernel size used was a 3x3. As the papers have both had extensive research performed on the model, the Quadsim model would also use kernel size of 3x3.
+
+The filter sizes were chosen using the following logic;
+1. Past experience and experimentation with Convolutional neural networks.
+2. The simulator's environment is less detailed than the real world, which is the testing environment for all three papers.
+
+It has been observed that in the papers [1] and [3], the filter sizes start at 32 and increase in each layer by a factor of either four or two based on the previous filter count. However, as the simulator environment is not detail-rich, a filter size of 16 was chosen and with an increase factor of two used between layers.
+
+##### Hyper-parameters
+
+The training hyper-parameters, such as epochs, steps per epoch, batch size and learning rate was first intuitively sampled with quick training runs.
+
+During testing, it was found that a learning rate of 0.01 or above, provided fast convergence but did not converge past 0.04. This resulted in utilising the Keras Adam optimisers decay rate to decrease the learning rate every batch update. A small decay rate of 0.02% was found to provide a stable decay rate with the model.  
+
+Due to the model parameter size, a batch size of 128 utilised greater system resources than the 8Gb GPU in the training computer provided. This results in a smaller batch size which requires more training iterations for the equivalent model accuracy of larger batch sizes.
+
+There are two methods to model training time and thus the accuracy;
+1. Increase epochs count
+2. Increase steps per epoch
+
+As network performance data is obtained and printed out after each epoch,
+a preference for increasing the epoch over the steps per epoch was preferred as the received performance data could be monitored to verify that;
+1. The model converges towards a minimum
+2. The model does not overfit the training data
+
+After sample testing hyper-parameters, values were chosen that accounted for the network limitations performance requirements and a more extensive training run was performed.
 
 The final hyper parameters are;  
  * Learning rate : 0.0035, with a decar rate of 0.0002
@@ -184,6 +211,21 @@ The evaluation score of the above test set;
 The final resulting IoU of the network is **0.487196539721**.
 
 The result is calculated by the average IoU of correct hero identification, excluding datasets without the hero, multiplied by the total true positives divided by the sum of the true positives, false negatives and false positives.
+
+Further improvements to the accuracy of the current model could be achieved with the following;
+* Collect more training data in varying positions and environments and train the model on the large dataset.
+* Trial of separable convolutional layers instead of regular convolutional layers. Experimental results were not conclusive as to any performance increase.
+* Different activation function such as elu to prevent dead RelUs.
+
+### Future work
+
+Should this project be improved or continued into the future, the following could be implemented.
+
+* Deeper network model. On page five of the [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357) paper, the model used contains a middle flow that consists of eight layers of a feed forward network combined with three, 3x3 kernel separable convolutional layers.
+* Image colour space conversion from RGB to HSV.
+* Wider inception model in the encoder block to possibly include a 5x5 kernel with strides of 2x2 and an individual 1x1 kernel with pooling.
+* Performance increase by freezing the model graph and optimising for either inference or Quantisation.
+* Train the model with to locate background object for obstacle avoidance.
 
 ### Simulation
 
